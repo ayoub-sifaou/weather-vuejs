@@ -30,9 +30,7 @@ module.exports = {
       // mutate for development...
     }
   },
-  publicPath: process.env.NODE_ENV === 'production'
-    ? '/weather-vuejs/'
-    : '/'
+  publicPath: '/'
 }
 
 function addStyleResource (rule) {
