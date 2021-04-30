@@ -7,7 +7,7 @@
 html {
   body {
     height: 96vh;
-    background: #e0e0e0;
+    background: $white;
     color: #707070;
     margin: 0;
     padding: 0;
@@ -16,4 +16,8 @@ html {
 
 .lh-2 {
   line-height: 2px !important;
+}
+
+.box-shadow-gray {
+  box-shadow: 4px 5px 30px rgb(0 0 0 / 13%);
 }

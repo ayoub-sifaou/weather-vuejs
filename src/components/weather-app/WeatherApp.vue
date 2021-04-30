@@ -12,7 +12,7 @@
               placeholder="What city?"
               autocomplete="off"
               v-model="city"
-              class="form-control border-radius-20 fs-16 p-5 input-search"
+              class="form-control text-gray-two box-shadow-gray border-0 border-radius-20 fs-18 p-5 input-search"
               v-on:change="getByCountry()"
             />
           </div>
