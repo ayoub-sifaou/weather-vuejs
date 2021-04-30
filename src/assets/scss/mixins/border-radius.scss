@@ -1,0 +1,7 @@
+@mixin borderRadius($number){
+  @for $i from 3 through $number{
+    .border-radius-#{$i}{
+      border-radius: $i+px !important;
+    }
+  }
+}

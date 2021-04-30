@@ -1,0 +1,7 @@
+@mixin shadow($colors) {
+  @each $name, $color in $colors {
+    .box-shadow-image-#{$name} {
+      box-shadow: 0 10px 20px rgba($color, 0.2);
+    }
+  }
+}

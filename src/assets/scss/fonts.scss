@@ -1,0 +1,16 @@
+@import "mixins/fonts_mixin";
+@include font-face('Lato-Regular', 'Lato-Regular', 'lato', 'sans-serif');
+@include font-face('Lato-Hairline', 'Lato-Hairline', 'lato', 'sans-serif');
+@include font-face('Lato-Light', 'Lato-Light', 'lato', 'sans-serif');
+@include font-face('Lato-Bold', 'Lato-Bold', 'lato', 'sans-serif');
+@include font-face('Lato-Black', 'Lato-Black', 'lato', 'sans-serif');
+@include fontSize($size: 0.7142857142857143rem);
+@include lineHeight($size: 0rem);
+
+$lato-regular : 'Lato-Regular', sans-serif;
+$lato-light : 'Lato-Light', sans-serif;
+$lato-hairline: 'Lato-Hairline', sans-serif;
+$lato-bold : 'Lato-Bold', sans-serif;
+$lato-black : 'Lato-Black', sans-serif;
+
+

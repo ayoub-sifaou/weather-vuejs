@@ -1,0 +1,36 @@
+@import "variables";
+@import "fonts";
+@import "mixins/border-radius";
+@import "mixins/box-shadow";
+
+$spacer: 1rem;
+$spacers: (
+  0: 0,
+  1: ($spacer * .25),
+  2: ($spacer * .5),
+  3: ($spacer * .75),
+  4: ($spacer * 1),
+  5: ($spacer * 1.5),
+  6: ($spacer * 3)
+);
+$primary: #66D6D3;
+$secondary: #3dae2b;
+$third-color: #4197cb;
+$blue-light: #90C4E1;
+$yellow: #FCCA1C;
+$red: #E52A1D;
+$blue: #52B7FF;
+$theme-colors: (
+  "blue-weather": $blue,
+  "gray-two": #707070,
+);
+$colors :("primary":$primary,"secondary":$secondary, "blue":$blue);
+
+$gray-two: map_get($theme-colors, 'gray-two');
+$blue-weather: map_get($theme-colors, 'blue-weather');
+
+$font-family-base: $lato-regular;
+
+
+@include borderRadius(40);
+@include shadow($colors);
