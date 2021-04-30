@@ -30,6 +30,7 @@ $gray-two: map_get($theme-colors, 'gray-two');
 $blue-weather: map_get($theme-colors, 'blue-weather');
 
 $font-family-base: $lato-regular;
+$white: #fff;
 
 
 @include borderRadius(40);

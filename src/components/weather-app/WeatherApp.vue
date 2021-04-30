@@ -6,47 +6,44 @@
           <div class="d-flex justify-content-center align-content-center">
             <span class="text-center fs-30 text-capitalize Lato-Bold">{{title}}</span>
           </div>
-          <form class="search-city mt-3">
+          <div class="search-city mt-3">
             <input
               type="text"
               placeholder="What city?"
               autocomplete="off"
               v-model="city"
               class="form-control border-radius-20 fs-16 p-5 input-search"
-              v-on:keyup="getByCountry()"
+              v-on:change="getByCountry()"
             />
-          </form>
+          </div>
         </div>
       </div>
       <div class="row mt-3" v-if="showWeather">
-        <div class="col-12">
-          <div class="card-weather position-relative bg-white border-radius-20">
-           <div class="card-weather-header border-radius-20 bg-white ">
-             <img src="@/assets/images/clear-sky.jpg" alt="" class="w-100 h-100" />
-           </div>
-           <div class="card-weather-body px-3 py-5">
-             <div class="tem-weather">
-               <div class="row">
-                 <div class="col-8">
-                   <span class="d-flex justify-content-center align-items-center">
-                     <span class="text-gray-two d-flex justify-content-center Lato-Light fs-35">
-                     {{spitOutCelcius(info.main.temp)}}&deg;C
-                   </span>
-                   <span class="ml-2 text-blue-weather fs-28"><font-awesome-icon icon="thermometer-full" /></span>
-                   </span>
-                 </div>
-                 <div class="col-4">
-                   <div class="">
-
-                   </div>
-                 </div>
-               </div>
-             </div>
-           </div>
-           <div class="name-city-weather d-flex flex-column align-items-center position-absolute">
-              <span class="Lato-Light fs-20 text-gray-two">{{ info.name }}</span>
-              <span class="Lato-Bold fs-25 lh-2">...</span>
-           </div>
+        <div class="bg-weather border-radius-20 bg-white ">
+          <img src="@/assets/images/clear.jpg" alt="" class="w-100 h-100" />
+        </div>
+        <div class="content-weather-app  position-relative">
+          <div class="date-location-weather row flex-column">
+            <span class="text-white Lato-Bold fs-20 lh-30">{{ day }}</span>
+            <span class="text-white mt-1 Lato-Light fs-16 lh-30">{{ date }}</span>
+            <div class="location w-100">
+              <span class="text-white mr-2 fs-20"><font-awesome-icon icon="map-marked-alt" /></span>
+              <span class="text-white mt-2 Lato-Light fs-16 lh-30">{{ info.name }}</span>
+            </div>
+          </div>
+          <div class="tem-weather">
+            <div class="icon-weather mb-2">
+              <i class="wi text-white fs-70" :class="getNewIcon(info.weather[0].icon)"></i>
+            </div>
+            <div class="temp">
+              <span class="Lato-Bold fs-70 l-35 mr-2 text-white">{{spitOutCelcius(info.main.temp)}}</span>
+              <i class="wi wi-celsius text-white fs-80"></i>
+            </div>
+            <div class="condition">
+              <span class="fs-22 lh-30 text-capitalize Lato-Bold text-white">
+                {{info.weather[0].description}}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -60,10 +57,10 @@ import { Prop } from 'vue-property-decorator'
 import axios from 'axios'
 import { isMobile } from '@/modal/utilits_functions'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTemperatureHigh, faThermometerFull } from '@fortawesome/free-solid-svg-icons'
+import { faTemperatureHigh, faThermometerFull, faMapMarkedAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faTemperatureHigh, faThermometerFull)
+library.add(faTemperatureHigh, faThermometerFull, faMapMarkedAlt)
 
 @Options({
   components: {
@@ -77,9 +74,20 @@ export default class WeatherApp extends Vue {
   city: string = '';
   info: any = [];
   isMobile = isMobile();
+  dateObject: Date = new Date();
+  days: any = [];
+  day: string = '';
+  date: string = '';
+  iconUrl: string = '';
   @Prop({ default: 'Weather in' }) title?: string;
 
-  created () {}
+  created () {
+    this.days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    this.day = this.days[this.dateObject.getDay()]
+    this.date = this.dateObject.toLocaleDateString('en-US', { day: 'numeric' }) + ' ' +
+      this.dateObject.toLocaleDateString('en-US', { month: 'short' }) + ' ' +
+      this.dateObject.toLocaleDateString('en-US', { year: 'numeric' })
+  }
 
   mounted () {
   }
@@ -102,35 +110,72 @@ export default class WeatherApp extends Vue {
         console.log(error)
       })
   }
+
+  getNewIcon (icon: string) {
+    switch (icon) {
+      case '01d': {
+        return 'wi-day-sunny'
+      }
+      case '01n': {
+        return 'wi-night-clear'
+      }
+      case '02d': {
+        return 'wi-day-cloudy'
+      }
+      case '02n': {
+        return 'wi-night-alt-cloudy'
+      }
+      case '03d': {
+        return 'wi-cloudy'
+      }
+      case '03n': {
+        return 'wi-cloudy'
+      }
+      case '04d': {
+        return 'wi-smog text-dark'
+      }
+      case '04n': {
+        return 'wi-smog text-dark'
+      }
+      default: {
+        // statements;
+        break
+      }
+    }
+  }
 }
 </script>
 
 <style scoped lang="scss">
-@use "../../assets/scss/bootstrap-overrides" as *;
+@use "../../assets/scss/bootstrap-overrides" as var;
 
 .mainWeatherApp {
-  .city-name {
-    span {
-      top: -60px;
+  .bg-weather {
+    position: absolute;
+    height: calc(100% - 152px);
+    margin: auto 15px;
+    overflow: hidden;
+    img {
+      object-fit: cover;
+      object-position: center;
     }
   }
-  .search-city {
-    .input-search  {
-      &:focus {
-        box-shadow: none;
-        border: 0;
+  .content-weather-app {
+    .date-location-weather {
+      width: 150px;
+      position: absolute;
+      left: 50px;
+      top: 15px;
+      span {
+        text-shadow: 1px 1px 2px var.$white;
       }
     }
   }
-  .card-weather {
-    .card-weather-header {
-      height: 170px;
-      overflow: hidden;
-    }
-  }
-  .name-city-weather {
-    left: 37%;
-    top: 85px;
+  .tem-weather {
+    width: 220px;
+    position: fixed;
+    left: 46px;
+    bottom: 16%;
   }
 }
 </style>
