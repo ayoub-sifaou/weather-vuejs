@@ -18,32 +18,30 @@
           </div>
         </div>
       </div>
-      <div class="row mt-3" v-if="showWeather">
+      <div class="row position-relative mt-3" v-if="showWeather">
         <div class="bg-weather border-radius-20 bg-white ">
           <img src="@/assets/images/clear.jpg" alt="" class="w-100 h-100" />
         </div>
-        <div class="content-weather-app  position-relative">
-          <div class="date-location-weather row flex-column">
-            <span class="text-white Lato-Bold fs-20 lh-30">{{ day }}</span>
-            <span class="text-white mt-1 Lato-Light fs-16 lh-30">{{ date }}</span>
-            <div class="location w-100">
-              <span class="text-white mr-2 fs-20"><font-awesome-icon icon="map-marked-alt" /></span>
-              <span class="text-white mt-2 Lato-Light fs-16 lh-30">{{ info.name }}</span>
-            </div>
+        <div class="date-location-weather row flex-column">
+          <span class="text-white Lato-Bold fs-20 lh-30">{{ day }}</span>
+          <span class="text-white mt-1 Lato-Light fs-16 lh-30">{{ date }}</span>
+          <div class="location w-100">
+            <span class="text-white mr-2 fs-20"><font-awesome-icon icon="map-marked-alt" /></span>
+            <span class="text-white mt-2 Lato-Light fs-16 lh-30">{{ info.name }}</span>
           </div>
-          <div class="tem-weather">
-            <div class="icon-weather mb-2">
-              <i class="wi text-white fs-70" :class="getNewIcon(info.weather[0].icon)"></i>
-            </div>
-            <div class="temp">
-              <span class="Lato-Bold fs-70 l-35 mr-2 text-white">{{spitOutCelcius(info.main.temp)}}</span>
-              <i class="wi wi-celsius text-white fs-80"></i>
-            </div>
-            <div class="condition">
+        </div>
+        <div class="tem-weather">
+          <div class="icon-weather mb-2">
+            <i class="wi text-white fs-70" :class="getNewIcon(info.weather[0].icon)"></i>
+          </div>
+          <div class="temp">
+            <span class="Lato-Bold fs-70 l-35 mr-2 text-white">{{spitOutCelcius(info.main.temp)}}</span>
+            <i class="wi wi-celsius text-white fs-80"></i>
+          </div>
+          <div class="condition">
               <span class="fs-22 lh-30 text-capitalize Lato-Bold text-white">
                 {{info.weather[0].description}}
               </span>
-            </div>
           </div>
         </div>
       </div>
@@ -151,8 +149,7 @@ export default class WeatherApp extends Vue {
 
 .mainWeatherApp {
   .bg-weather {
-    position: absolute;
-    height: calc(100% - 152px);
+    height: calc(100vh - 152px);
     margin: auto 15px;
     overflow: hidden;
     img {
@@ -160,21 +157,19 @@ export default class WeatherApp extends Vue {
       object-position: center;
     }
   }
-  .content-weather-app {
-    .date-location-weather {
-      width: 150px;
-      position: absolute;
-      left: 50px;
-      top: 15px;
-      span {
-        text-shadow: 1px 1px 2px var.$white;
-      }
+  .date-location-weather {
+    width: 150px;
+    position: absolute;
+    left: 50px;
+    top: 15px;
+    span {
+      text-shadow: 1px 1px 2px var.$white;
     }
   }
   .tem-weather {
     width: 220px;
     position: fixed;
-    left: 46px;
+    right: 70px;
     bottom: 16%;
   }
 }
