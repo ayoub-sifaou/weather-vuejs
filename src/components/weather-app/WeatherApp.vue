@@ -14,13 +14,13 @@
               v-model="city"
               class="form-control text-gray-two box-shadow-gray border-0 border-radius-20 fs-18 p-5 input-search"
               v-on:change="getWeatherData()"
-              v-on:click="hideContainerWeather()"
+              v-on:keyup="hideContainerWeather()"
             />
           </div>
         </div>
       </div>
       <div class="row position-relative mt-3" v-if="showWeather">
-        <div class="bg-weather border-radius-20 bg-white ">
+        <div class="bg-weather w-100 border-radius-20 bg-white ">
           <img v-if="isDayTime(info.weather[0].icon)" src="@/assets/images/clear.jpg" alt="" class="w-100 h-100" />
           <img v-if="!isDayTime(info.weather[0].icon)" src="@/assets/images/night.jpg" alt="" class="w-100 h-100" />
         </div>
@@ -32,18 +32,20 @@
             <span class="text-white mt-2 Lato-Light fs-16 lh-30">{{ info.name }}</span>
           </div>
         </div>
-        <div class="tem-weather">
-          <div class="icon-weather mb-2">
-            <i class="wi text-white fs-70" :class="getNewIcon(info.weather[0].icon)"></i>
-          </div>
-          <div class="temp">
-            <span class="Lato-Bold fs-70 l-35 mr-2 text-white">{{spitOutCelcius(info.main.temp)}}</span>
-            <i class="wi wi-celsius text-white fs-80"></i>
-          </div>
-          <div class="condition">
+        <div class="w-100 position-relative">
+          <div class="tem-weather">
+            <div class="icon-weather mb-2">
+              <i class="wi text-white fs-70" :class="getNewIcon(info.weather[0].icon)"></i>
+            </div>
+            <div class="temp">
+              <span class="Lato-Bold fs-70 l-35 mr-2 text-white">{{spitOutCelcius(info.main.temp)}}</span>
+              <i class="wi wi-celsius text-white fs-80"></i>
+            </div>
+            <div class="condition">
               <span class="fs-22 lh-30 text-capitalize Lato-Bold text-white">
                 {{info.weather[0].description}}
               </span>
+            </div>
           </div>
         </div>
       </div>
@@ -109,6 +111,7 @@ export default class WeatherApp extends Vue {
   }
 
   getWeatherData () {
+    alert('tetetetet')
     if (this.city !== '') {
       axios
         .get(this.apiWeather + this.city + '&appid=' + this.apiKeyWeather)
@@ -181,10 +184,9 @@ export default class WeatherApp extends Vue {
     }
   }
   .tem-weather {
-    width: 100%;
-    position: fixed;
-    left: 90px;
-    bottom: 16%;
+    position: absolute;
+    left: 30%;
+    bottom: 89px;
   }
 }
 </style>
