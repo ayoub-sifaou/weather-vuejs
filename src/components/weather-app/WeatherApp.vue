@@ -6,20 +6,23 @@
           <div class="d-flex justify-content-center align-content-center">
             <span class="text-center fs-30 text-capitalize Lato-Bold">{{title}}</span>
           </div>
-          <div class="">
-            <Multiselect
+          <div class="search-city mt-3">
+            <input
+              type="text"
+              placeholder="What city?"
+              autocomplete="off"
               v-model="city"
-              :options="dataCity"
-              :searchable="true"
-              :max="1"
+              class="form-control text-gray-two box-shadow-gray border-0 border-radius-20 fs-18 p-5 input-search"
               v-on:change="getWeatherData()"
+              v-on:click="hideContainerWeather()"
             />
           </div>
         </div>
       </div>
       <div class="row position-relative mt-3" v-if="showWeather">
         <div class="bg-weather border-radius-20 bg-white ">
-          <img src="@/assets/images/clear.jpg" alt="" class="w-100 h-100" />
+          <img v-if="isDayTime(info.weather[0].icon)" src="@/assets/images/clear.jpg" alt="" class="w-100 h-100" />
+          <img v-if="!isDayTime(info.weather[0].icon)" src="@/assets/images/night.jpg" alt="" class="w-100 h-100" />
         </div>
         <div class="date-location-weather row flex-column">
           <span class="text-white Lato-Bold fs-20 lh-30">{{ day }}</span>
@@ -56,19 +59,16 @@ import { isMobile } from '@/modal/utilits_functions'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faTemperatureHigh, faThermometerFull, faMapMarkedAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import Multiselect from '@vueform/multiselect'
 
 library.add(faTemperatureHigh, faThermometerFull, faMapMarkedAlt)
 @Options({
   components: {
-    FontAwesomeIcon,
-    Multiselect
+    FontAwesomeIcon
   }
 })
 export default class WeatherApp extends Vue {
   apiWeather = process.env.VUE_APP_WEATHER_API;
-  apiKeyWeather = process.env.VUE_APP_WEATHER_API_KEY;
-  apiCity = process.env.VUE_APP_API_CITY;
+  apiKeyWeather = process.env.VUE_APP_WEATHER_API_KEY;;
   showWeather: boolean = false;
   city: string = '';
   info: any = [];
@@ -87,8 +87,6 @@ export default class WeatherApp extends Vue {
     this.date = this.dateObject.toLocaleDateString('en-US', { day: 'numeric' }) + ' ' +
       this.dateObject.toLocaleDateString('en-US', { month: 'short' }) + ' ' +
       this.dateObject.toLocaleDateString('en-US', { year: 'numeric' })
-    this.getWeatherCity()
-    console.log(this.apiCity)
   }
 
   mounted () {
@@ -98,16 +96,16 @@ export default class WeatherApp extends Vue {
     return Math.round(tem - 273.15)
   }
 
-  getWeatherCity () {
-    axios.get(this.apiCity)
-      .then(response => {
-        for (const city of response.data) {
-          this.dataCity.push(city.name)
-        }
-      })
-      .catch(error => {
-        console.log(error)
-      })
+  hideContainerWeather () {
+    this.showWeather = false
+  }
+
+  isDayTime (icon: string) {
+    if (icon.includes('d')) {
+      return true
+    } else {
+      return false
+    }
   }
 
   getWeatherData () {
@@ -146,10 +144,10 @@ export default class WeatherApp extends Vue {
         return 'wi-cloudy'
       }
       case '04d': {
-        return 'wi-smog text-dark'
+        return 'wi-smog'
       }
       case '04n': {
-        return 'wi-smog text-dark'
+        return 'wi-smog'
       }
       default: {
         // statements;
@@ -174,7 +172,7 @@ export default class WeatherApp extends Vue {
     }
   }
   .date-location-weather {
-    width: 150px;
+    width: calc(100% - 70px);
     position: absolute;
     left: 50px;
     top: 15px;
@@ -183,9 +181,9 @@ export default class WeatherApp extends Vue {
     }
   }
   .tem-weather {
-    width: 220px;
+    width: 100%;
     position: fixed;
-    right: 70px;
+    left: 90px;
     bottom: 16%;
   }
 }
