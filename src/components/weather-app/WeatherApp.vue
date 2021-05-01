@@ -6,14 +6,13 @@
           <div class="d-flex justify-content-center align-content-center">
             <span class="text-center fs-30 text-capitalize Lato-Bold">{{title}}</span>
           </div>
-          <div class="search-city mt-3">
-            <input
-              type="text"
-              placeholder="What city?"
-              autocomplete="off"
+          <div class="">
+            <Multiselect
               v-model="city"
-              class="form-control text-gray-two box-shadow-gray border-0 border-radius-20 fs-18 p-5 input-search"
-              v-on:change="getByCountry()"
+              :options="dataCity"
+              :searchable="true"
+              :max="1"
+              v-on:change="getWeatherData()"
             />
           </div>
         </div>
@@ -57,17 +56,19 @@ import { isMobile } from '@/modal/utilits_functions'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faTemperatureHigh, faThermometerFull, faMapMarkedAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import Multiselect from '@vueform/multiselect'
 
 library.add(faTemperatureHigh, faThermometerFull, faMapMarkedAlt)
-
 @Options({
   components: {
-    FontAwesomeIcon
+    FontAwesomeIcon,
+    Multiselect
   }
 })
 export default class WeatherApp extends Vue {
   apiWeather = process.env.VUE_APP_WEATHER_API;
   apiKeyWeather = process.env.VUE_APP_WEATHER_API_KEY;
+  apiCity = process.env.VUE_APP_API_CITY;
   showWeather: boolean = false;
   city: string = '';
   info: any = [];
@@ -77,6 +78,7 @@ export default class WeatherApp extends Vue {
   day: string = '';
   date: string = '';
   iconUrl: string = '';
+  dataCity: any = []
   @Prop({ default: 'Weather in' }) title?: string;
 
   created () {
@@ -85,6 +87,8 @@ export default class WeatherApp extends Vue {
     this.date = this.dateObject.toLocaleDateString('en-US', { day: 'numeric' }) + ' ' +
       this.dateObject.toLocaleDateString('en-US', { month: 'short' }) + ' ' +
       this.dateObject.toLocaleDateString('en-US', { year: 'numeric' })
+    this.getWeatherCity()
+    console.log(this.apiCity)
   }
 
   mounted () {
@@ -94,19 +98,31 @@ export default class WeatherApp extends Vue {
     return Math.round(tem - 273.15)
   }
 
-  getWeatherCondition () {}
-
-  getByCountry () {
-    axios
-      .get(this.apiWeather + this.city + '&appid=' + this.apiKeyWeather)
+  getWeatherCity () {
+    axios.get(this.apiCity)
       .then(response => {
-        this.showWeather = true
-        this.info = response.data
+        for (const city of response.data) {
+          this.dataCity.push(city.name)
+        }
       })
       .catch(error => {
-        this.showWeather = false
         console.log(error)
       })
+  }
+
+  getWeatherData () {
+    if (this.city !== '') {
+      axios
+        .get(this.apiWeather + this.city + '&appid=' + this.apiKeyWeather)
+        .then(response => {
+          this.showWeather = true
+          this.info = response.data
+        })
+        .catch(error => {
+          this.showWeather = false
+          console.log(error)
+        })
+    }
   }
 
   getNewIcon (icon: string) {
